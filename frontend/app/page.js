@@ -8,7 +8,7 @@ export default function AdminDashboard() {
   // Backend'den veriyi çeken fonksiyon
   const fetchAnalytics = async () => {
     try {
-      const response = await fetch("http://192.168.100.2:8000/analytics/summary");
+      const response = await fetch("http://localhost:8000/analytics/summary");
       const result = await response.json();
       setData(result);
     } catch (error) {
