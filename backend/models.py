@@ -13,3 +13,14 @@ class RawEvent(Base):
     timestamp = Column(DateTime(timezone=True)) # Zaman damgası için timezone ekledim
     metadata_field = Column(JSONB)
     created_at = Column(DateTime, default=func.now())
+
+
+class AnalyticsEvent(Base):
+    __tablename__ = 'analytics_events'
+
+    id = Column(Integer, primary_key=True, index=True)
+    event_type = Column(String)
+    event_count = Column(Integer)
+    window_start = Column(DateTime(timezone=True))
+
+    
