@@ -1,0 +1,15 @@
+from sqlalchemy import Column, Integer, String, DateTime, func
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
+class RawEvent(Base):
+    __tablename__ = 'raw_events'
+
+    id = Column(Integer, primary_key=True, index=True)
+    event_type = Column(String, index=True)
+    user_id = Column(Integer, index=True)
+    timestamp = Column(DateTime)
+    metadata_field = Column(JSONB)
+    created_at = Column(DateTime, default=func.now())
