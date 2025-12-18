@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, RawEvent
 from fastapi import Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 # veritabanı bağlantısı
 DATABASE_URL = "postgresql+asyncpg://user:password@db/events_db"
@@ -19,6 +20,14 @@ AsyncSessionLocal = sessionmaker(
 
 # FastAPI uygulaması oluşturma
 app = FastAPI(title="Scate Ingestion API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Her yerden gelen isteğe izin ver
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Gelen paket kontrolü
 class EventCreate(BaseModel):
@@ -63,3 +72,27 @@ async def ingest_event(event: EventCreate, db: AsyncSession = Depends(get_db)):
         # Hata durumunda işlemi geri al
         await db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+
+@app.get("/analytics/summary")
+async def get_analytics_summary(db=Depends(get_db)):
+    from sqlalchemy import text
+    try:
+        # SQL ile direkt analytics tablosundan çekiyoruz
+        query = text("SELECT event_type, event_count, window_start FROM analytics_events")
+        result = await db.execute(query)
+        rows = result.fetchall()
+        
+        # Veriyi liste formatına çevirip dönüyoruz
+        return [
+            {
+                "event_type": r[0], 
+                "event_count": r[1], 
+                "window_start": r[2].isoformat() if r[2] else None
+            } 
+            for r in rows
+        ]
+    except Exception as e:
+        print(f"Veri çekme hatası: {e}")
+        return []
