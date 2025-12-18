@@ -35,3 +35,18 @@ services:
     # Modelleri ortak kullanabilmek için backend klasörünü buraya da bağlıyoruz
     volumes:
       - ./backend:/app/models_folder
+
+# 4. Frontend (Next.js) - YENİ EKLENDİ
+  frontend:
+    build: ./frontend
+    container_name: frontend_service
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
