@@ -10,6 +10,6 @@ class RawEvent(Base):
     id = Column(Integer, primary_key=True, index=True)
     event_type = Column(String, index=True)
     user_id = Column(Integer, index=True)
-    timestamp = Column(DateTime)
+    timestamp = Column(DateTime(timezone=True)) # Zaman damgası için timezone ekledim
     metadata_field = Column(JSONB)
     created_at = Column(DateTime, default=func.now())
