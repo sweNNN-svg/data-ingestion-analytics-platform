@@ -23,4 +23,13 @@ class AnalyticsEvent(Base):
     event_count = Column(Integer)
     window_start = Column(DateTime(timezone=True))
 
-    
+
+
+
+
+
+
+
+
+
+

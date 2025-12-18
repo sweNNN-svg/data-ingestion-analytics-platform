@@ -22,3 +22,16 @@ services:
       - POSTGRES_DB=events_db
     ports:
       - "5432:5432"
+
+  # etl_worker servisi
+  etl_worker:
+    build: ./etl_worker
+    container_name: etl_service
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://user:password@db/events_db
+    depends_on:
+      - db
+    # Modelleri ortak kullanabilmek için backend klasörünü buraya da bağlıyoruz
+    volumes:
+      - ./backend:/app/models_folder
