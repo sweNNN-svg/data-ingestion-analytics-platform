@@ -1,4 +1,4 @@
-# Scate Case Study: End-to-End Analytics Pipeline
+# Event Tracking & Analytics Platform
 
 ## 1. Proje Özeti (Project Overview)
 Bu proje, yüksek hacimli event verilerinin (ingestion) karşılanması, işlenmesi (ETL) ve son kullanıcıya sunulması (Dashboard) süreçlerini kapsayan uçtan uca (End-to-End) bir veri mühendisliği simülasyonudur. Amaç, sadece veri akışını sağlamak değil, aynı zamanda ölçeklenebilir, hataya dayanıklı (fault-tolerant) ve modern bir mikroservis mimarisi inşa etmektir.
