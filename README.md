@@ -9,6 +9,7 @@ Bu proje, yüksek hacimli event verilerinin (ingestion) karşılanması, işlenm
 3. **Visualization:** Son olarak, `Next.js` tabanlı dashboard, bu işlenmiş veriyi gerçek zamanlıya yakın bir hızda görselleştirir.
 
 ---
+---
 
 ## 2. Mimari Kararlar ve Ödünler (Key Engineering Decisions & Trade-offs)
 Bir sistem tasarlarken yapılan tercihler, kodun kendisi kadar önemlidir. Bu projede alınan kritik kararlar şunlardır:
