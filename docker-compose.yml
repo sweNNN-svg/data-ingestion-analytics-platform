@@ -1,52 +1,50 @@
 version: '3.8'
 
 services:
-# Bizim API servisi
-  backend:
-    build: ./backend
-    container_name: backend_service
-    ports:
-      - "8000:8000"
-    environment:
-      - DATABASE_URL=postgresql+asyncpg://user:password@db/events_db
-    depends_on:
-      - db
-
-# PostgreSQL veritabanı servisi
+  # 1. Veritabanı (Aynen kalıyor)
   db:
-    image: postgres:15
+    image: postgres:15-alpine
     container_name: db_service
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=events_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: events_db
     ports:
       - "5432:5432"
-
-  # etl_worker servisi
-  etl_worker:
-    build: ./etl_worker
-    container_name: etl_service
-    restart: always
-    environment:
-      - DATABASE_URL=postgresql://user:password@db/events_db
-    depends_on:
-      - db
-    # Modelleri ortak kullanabilmek için backend klasörünü buraya da bağlıyoruz
     volumes:
-      - ./backend:/app/models_folder
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d events_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-# 4. Frontend (Next.js) - YENİ EKLENDİ
-  frontend:
-    build: ./frontend
-    container_name: frontend_service
-    restart: always
+  # 2. Yeni GO Servisi (Eski backend yerine bu geçiyor)
+  ingestion-go:
+    build: ./ingestion-go  # Go kodunun olduğu klasör
+    container_name: ingestion_service
     ports:
-      - "3000:3000"
+      - "8080:3000"  # Dışarıya 8080 olarak açıyoruz (Çakışmayı önlemek için)
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - DB_HOST=db
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_NAME=events_db
+      - DB_PORT=5432
     depends_on:
-      - backend
+      db:
+        condition: service_healthy
+
+  # ŞİMDİLİK KAPALI (Go testinden sonra açarız)
+  # etl_worker:
+  #   build: ./etl_worker
+  #   ...
+  
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:3000"  <-- Bu 3000 portu çakışma yaratıyordu
+  #   ...
 
 volumes:
   postgres_data:

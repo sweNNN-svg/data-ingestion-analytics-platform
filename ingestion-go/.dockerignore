@@ -1,0 +1,60 @@
+# Git dosyaları
+.git
+.gitignore
+.gitattributes
+
+# Go build çıktıları
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+ingestion-service
+server
+
+# Go cache ve dependency dosyaları
+vendor/
+*.mod.sum
+
+# IDE ve editor dosyaları
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Log dosyaları
+*.log
+
+# Temporary dosyalar
+tmp/
+temp/
+*.tmp
+
+# Test coverage dosyaları
+*.coverprofile
+coverage.html
+
+# Documentation (opsiyonel, eğer varsa)
+docs/
+*.md
+!README.md
+
+# Docker dosyaları (kendisini ignore etme)
+# Dockerfile
+# .dockerignore
+
+# Environment dosyaları (güvenlik için)
+.env
+.env.local
+.env.*.local
+
+# Build klasörleri
+build/
+dist/
+bin/
+
+
